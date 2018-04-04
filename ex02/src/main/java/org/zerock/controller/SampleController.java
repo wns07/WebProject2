@@ -1,5 +1,7 @@
 package org.zerock.controller;
 
+import java.util.*;
+
 import org.springframework.web.bind.annotation.*;
 import org.zerock.domain.*;
 
@@ -22,4 +24,30 @@ public class SampleController {
 		return vo;
 	}
 	
+	@RequestMapping("/sendList")
+	public List<SampleVO> sendList() {
+		List<SampleVO> list = new ArrayList<>();
+		for(int i=0; i<10; i++) {
+			SampleVO vo = new SampleVO();
+			vo.setFirstName("길동");
+			vo.setLastName("홍");
+			vo.setMno(i);
+			list.add(vo);
+		}
+		return list;
+	}
+	
+	@RequestMapping("/sendMap")
+	public Map<Integer, SampleVO> sendMap() {
+		Map<Integer, SampleVO> map = new HashMap<>();
+		
+		for(int i=0; i<10; i++) {
+			SampleVO vo = new SampleVO();
+			vo.setFirstName("길동");
+			vo.setLastName("홍");
+			vo.setMno(i);
+			map.put(i, vo);
+		}
+		return map;
+	}
 }
