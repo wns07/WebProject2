@@ -7,12 +7,14 @@
 	<name>ex02</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	
 	<properties>
 		<java-version>1.8</java-version>		<!-- 변경 -->
 		<org.springframework-version>4.3.3.RELEASE</org.springframework-version>		<!-- 변경 -->
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
+	
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -160,6 +162,12 @@
 			<version>1.16</version>
 		</dependency>
 		
+		<!-- p354 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.8.4</version>
+		</dependency>
 		<!-- 추가 끝 -->
 		
 	</dependencies>
