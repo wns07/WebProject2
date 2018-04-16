@@ -4,6 +4,21 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false" %>
 
+<style>
+	#modDiv {
+		width : 300px;
+		height : 100px;
+		background-color : gray;
+		position : absolute;
+		top : 50%;
+		left : 50%;
+		margin-top : -50px;
+		margin-left : -150px;
+		padding : 10px;
+		z-index : 1000;
+	}
+</style>
+
 <!-- jQuery 2.1.4 -->
 <script src="/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script>
@@ -16,7 +31,7 @@
 			var str = "";
 			
 			$(data).each(function() {
-				str += "<li data-rno='"+this.rno+"' class='replyLi'>" + this.rno + ":" + this.replytext + "</li>";
+				str += "<li data-rno='"+this.rno+"' class='replyLi'>" + this.rno + ":" + this.replytext + "<button>MOD</button></li>";
 			});
 			
 			$("#replies").html(str);
@@ -60,7 +75,75 @@
 				}
 			});
 		});
+	
+		$("#replies").on("click", ".replyLi button", function() {
+			var reply = $(this).parent();
+			
+			var rno = reply.attr("data-rno");
+			var replytext = reply.text();
+			
+			$(".modal-title").html(rno);
+			$("#replytext").val(replytext);
+			$("#modDiv").show("slow");
+			
+			/* alert(rno + " : " + replytext); */
+		});
+	
+		$("#replyDelBtn").on("click", function() {
+			var rno = $(".modal-title").html();
+			var replytext = $("#replytext").val();
+			
+			$.ajax({
+				type : "delete",
+				url : "/replies/" + rno,
+				headers : {
+					"Content-Type" : "application/json",
+					"X-HTTP-Method-Override" : "DELETE"
+				},
+				dataType : "text",
+				success : function(result) {
+					console.log("result : " + result);
+					
+					if(result=="SUCCESS") {
+						alert("삭제되었습니다.");
+						$("#modDiv").hide("slow");
+						getAllList();
+					}
+				}
+			});
+		});
+		
+		$("#replyModBtn").on("click", function() {
+			var rno = $(".modal-title").html();
+			var replytext = $("#replytext").val();
+			
+			$.ajax({
+				type : "put",
+				url : "/replies/" + rno,
+				headers : {
+					"Content-Type" : "application/json",
+					"X-HTTP-Method-Override" : "PUT"
+				},
+				data : JSON.stringify({
+					replytext:replytext
+				}),
+				dataType : "text",
+				success : function(result) {
+					console.log("result : " + result);
+					
+					if(result == "SUCCESS") {
+						alert("수정되었습니다.");
+						$("#modDiv").hide("slow");
+						getAllList();
+//						getPageList(replyPage);		// p419 페이징
+					}
+				}
+			});
+		});
+		
 	});
+	
+	
 </script>
 
 <html>
@@ -78,7 +161,19 @@
 			REPLY TEXT <input type="text" name="replytext" id="newReplyText">
 		</div>
 		<button id="replyAddBtn">ADD REPLY</button>
-		<button id="btnn">btnn</button>
+	</div>
+	
+	<div id="modDiv" style="display:none;">
+		<div class="modal-title"></div>
+		<div>
+			<input type="text" id="replytext">
+		</div>
+		<div>
+			<button type="button" id="replyModBtn">Modify</button>
+			<button type="button" id="replyDelBtn">DELETE</button>
+			<button type="button" id="closeBtn">Close</button>
+		</div>
+	
 	</div>
 	
 	<ul id="replies">
