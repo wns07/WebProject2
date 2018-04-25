@@ -2,8 +2,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@include file="../include/header.jsp"%>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+
+<div class="row">
+	<div class="col-md-12">
+		
+		<div class="box box-success">
+			<div class="box-header">
+				<h3 class="box-title">ADD NEW REPLY</h3>
+			</div>
+			<div class="box=body">
+				<label for="newReplyWriter">Writer</label>
+				<input class="form-control" type="text" placeholder="USER ID" id="newReplyWriter">
+				<label for="newReplyText">ReplyText</label>
+				<input class="form-control" type="text" placeholder="REPLY TEXT" id="newReplyText">
+			</div>
+			
+			<!-- /.box-body -->
+			<div class="box-footer">
+				<button type="submit" class="btn btn-primary" id="replyAddBtn">ADD REPLY</button>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+<!-- The time line -->
+<ul class="timeline">
+	<!-- timeline time label -->
+	<li class="time-label" id="repliesDiv">
+		<span class="bg-green">Replies List</span>
+	</li>
+</ul>
+	
+<div class="text-center">
+	<ul id="pagination" class="pagination pagination-sm no-margin">
+	</ul>
+</div>
+
 <script id="template" type="text/x-handlebars-template">
 	{{#each .}}
 	<li class="replyLi" data-rno={{rno}}>
@@ -32,7 +68,7 @@
 		return year + "/" + month + "/" + date;
 	});
 	
-	var printDate = function(replyArr, target, templateObject) {
+	var printData = function(replyArr, target, templateObject) {
 		var template = Handlebars.compile(templateObject.html());
 		
 		var html = template(replyArr);
@@ -88,42 +124,38 @@
 		getPage("/replies/" + bno + "/" + replyPage);
 	});
 	
+	$("#replyAddBtn").on("click", function() {
+		alert("zmfflr!");
+		var replyerObj = $("#newReplyWriter");
+		var replytextObj = $("#newReplyText");
+		var replyer = replyerObj.val();
+		var replytext = replytextObj.val();
+		
+		$.ajax({
+			type : "post",
+			url : "/replies/",
+			headers : {
+				"Content-Type" : "application/json",
+				"X-HTTP-Method-Override" : "POST"
+			},
+			dataType : "text",
+			data : JSON.stringify({bno:bno, replyer:replyer, replytext:replytext}),
+			success : function(result) {
+				console.log("result : " + result);
+				
+				if(result == "SUCCESS") {
+					alert("등록되었습니다.");
+					replyPage = 1;
+					getPage("/replies/" + bno + "/" + replyPage);
+					replyerObj.val("");
+					replytextObj.val("");
+				}
+			}
+		});
+	});
+	
 </script>
 
-<div class="row">
-	<div class="col-md-12">
-		
-		<div class="box box-success">
-			<div class="box-header">
-				<h3 class="box-title">ADD NEW REPLY</h3>
-			</div>
-			<div class="box=body">
-				<label for="newReplyWriter">Writer</label>
-				<input class="form-control" type="text" placeholder="USER ID" id="newReplyWriter">
-				<label for="newReplyText">ReplyText</label>
-				<input class="form-control" type="text" placeholder="REPLY TEXT" id="newReplyText">
-			</div>
-			
-			<!-- /.box-body -->
-			<div class="box-footer">
-				<button type="submit" class="btn btn-primary" id="replyAddBtn">ADD REPLY</button>
-			</div>
-		</div>
-	
-	</div>
-</div>
 
-<!-- The time line -->
-<ul class="timeline">
-	<!-- timeline time label -->
-	<li class="time-label" id="repliesDiv">
-		<span class="bg-green">Replies List</span>
-	</li>
-</ul>
-	
-<div class="text-center">
-	<ul id="pagination" class="pagination pagination-sm no-margin">
-	</ul>
-</div>
 
 <%@include file="../include/footer.jsp"%>
