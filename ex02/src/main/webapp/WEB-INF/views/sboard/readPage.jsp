@@ -40,6 +40,30 @@
 	</ul>
 </div>
 
+<!-- Modal -->
+<div id="modifyModal" class="modal modal-primary fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			
+			<div class="modal-body" data-rno>
+				<p><input type="text" id="replytext" class="form-control"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" id="replyModBtn">Modify</button>
+				<button type="button" class="btn btn-danger" id="replyDelBtn">DELETE</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
 <script id="template" type="text/x-handlebars-template">
 	{{#each .}}
 	<li class="replyLi" data-rno={{rno}}>
@@ -125,7 +149,6 @@
 	});
 	
 	$("#replyAddBtn").on("click", function() {
-		alert("zmfflr!");
 		var replyerObj = $("#newReplyWriter");
 		var replytextObj = $("#newReplyText");
 		var replyer = replyerObj.val();
@@ -154,8 +177,61 @@
 		});
 	});
 	
+	$(".timeline").on("click", ".replyLi", function(event) {
+		var reply = $(this);
+		
+		$("#replytext").val(reply.find(".timeline-body").text());
+		$(".modal-title").html(reply.attr("data-rno"));
+	});
+	
+	$("#replyModBtn").on("click", function() {
+		var rno = $(".modal-title").html();
+		var replytext = $("#replytext").val();
+		
+		$.ajax({
+			type : "put",
+			url : "/replies/" + rno,
+			headers : {
+				"Content-Type" : "application/json",
+				"X-HTTP-Method-Override" : "PUT"
+			},
+			data : JSON.stringify({replytext:replytext}),
+			dataType : "text",
+			success : function(result) {
+				console.log("result : " + result);
+				
+				if(result == "SUCCESS") {
+					alert("수정되었습니다.");
+					getPage("/replies/" + bno + "/" + replyPage);
+				}
+			}
+		});
+	});
+	
+	$("#replyDelBtn").on("click", function() {
+		var rno = $(".modal-title").html();
+		var replytext = $("#replytext").val();
+		
+		$.ajax({
+			type : "delete",
+			url : "/replies/" + rno,
+			headers : {
+				"Content-Type" : "application/json",
+				"X-HTTP-Method-Override" : "DELETE"
+			},
+			dataType : "text",
+			success : function(result) {
+				console.log("result : " + result);
+				
+				if(result == "SUCCESS") {
+					alert("삭제되었습니다.");
+					getPage("/replies/" + bno + "/" + replyPage);
+				}
+			}
+		});
+	});
+	
 </script>
-
 
 
 <%@include file="../include/footer.jsp"%>
