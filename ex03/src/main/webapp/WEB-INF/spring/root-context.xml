@@ -40,7 +40,14 @@
 	<context:component-scan base-package="org.zerock.service">
 	</context:component-scan>
 	
-	<!-- AOP 설정을 통한 자동적인 Proxy 객체 생성 -->
+	<!-- p473 -->
+	<context:component-scan base-package="org.zerock.aop">
+	</context:component-scan>
+	
+	<!-- AOP 설정을 통한 자동적인 Proxy 객체 생성(p460) -->
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
+	<!-- p473 -->
+	<aop:config></aop:config>
 	
 </beans>

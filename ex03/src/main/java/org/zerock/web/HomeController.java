@@ -1,18 +1,16 @@
 package org.zerock.web;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.text.*;
+import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.slf4j.*;
+import org.springframework.stereotype.*;
+import org.springframework.ui.*;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Handles requests for the application home page.
+ * 최초로 만들어지는거 -> 필요없음!!!
  */
 @Controller
 public class HomeController {
