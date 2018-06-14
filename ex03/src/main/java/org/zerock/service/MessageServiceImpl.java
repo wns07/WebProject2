@@ -3,6 +3,7 @@ package org.zerock.service;
 import javax.inject.*;
 
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 import org.zerock.domain.*;
 import org.zerock.persistence.*;
 
@@ -15,6 +16,7 @@ public class MessageServiceImpl implements MessageService {
 	@Inject
 	private PointDAO pointDAO;
 
+	@Transactional
 	@Override
 	public void addMessage(MessageVO vo) throws Exception {
 		messageDAO.create(vo);

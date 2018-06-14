@@ -12,14 +12,14 @@ import org.springframework.stereotype.*;
 public class SampleAdvice {
 	private static final Logger logger = LoggerFactory.getLogger(SampleAdvice.class);
 	
-	@Before("execution(* org.zerock.service.MessageService*.*(..))")
+//	@Before("execution(* org.zerock.service.MessageService*.*(..))")
 	public void startLog(JoinPoint jp) {
 		logger.info("=======================================");
 		logger.info("=======================================");
 		logger.info(Arrays.toString(jp.getArgs()));
 	}
 	
-	@Around("execution(* org.zerock.service.MessageService*.*(..))")
+//	@Around("execution(* org.zerock.service.MessageService*.*(..))")
 	public Object timeLog(ProceedingJoinPoint pjp) throws Throwable {
 		long startTime = System.currentTimeMillis();
 		logger.info(Arrays.toString(pjp.getArgs()));
