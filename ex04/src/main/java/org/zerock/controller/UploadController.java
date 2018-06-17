@@ -6,6 +6,7 @@ import java.util.*;
 import javax.annotation.*;
 
 import org.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.util.*;
@@ -43,6 +44,22 @@ public class UploadController {
 		File target = new File(uploadPath, savedName);
 		FileCopyUtils.copy(fileData, target);
 		return savedName;
+	}
+	
+	
+	@RequestMapping(value="/uploadAjax", method=RequestMethod.GET)
+	public void uploadAjax() {
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/uploadAjax", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
+		logger.info("originalName : " + file.getOriginalFilename());
+		logger.info("size : " + file.getSize());
+		logger.info("contentType : " + file.getContentType());
+		
+		return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
 	}
 	
 }
