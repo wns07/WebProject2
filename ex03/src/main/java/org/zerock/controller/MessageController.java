@@ -5,7 +5,6 @@ import javax.inject.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.zerock.domain.*;
-import org.zerock.persistence.*;
 import org.zerock.service.*;
 
 @RestController
