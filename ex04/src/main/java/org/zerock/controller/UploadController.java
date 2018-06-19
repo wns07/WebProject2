@@ -12,6 +12,7 @@ import org.springframework.ui.*;
 import org.springframework.util.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
+import org.zerock.util.*;
 
 @Controller
 public class UploadController {
@@ -56,10 +57,11 @@ public class UploadController {
 	@RequestMapping(value="/uploadAjax", method=RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception {
 		logger.info("originalName : " + file.getOriginalFilename());
-		logger.info("size : " + file.getSize());
-		logger.info("contentType : " + file.getContentType());
+//		logger.info("size : " + file.getSize());
+//		logger.info("contentType : " + file.getContentType());
 		
-		return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
+//		return new ResponseEntity<>(file.getOriginalFilename(), HttpStatus.CREATED);
+		return new ResponseEntity<>(UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes()), HttpStatus.CREATED);
 	}
 	
 }
