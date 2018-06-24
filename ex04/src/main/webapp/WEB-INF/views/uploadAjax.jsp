@@ -42,17 +42,64 @@
 			formData.append("file", file);
 			
 			$.ajax({
-				url : "/uploadAjax",
+				url : '/uploadAjax',
 				data : formData,
-				dataType : "text",
+				dataType : 'text',
 				processData : false,
 				contentType : false,
-				type : "POST",
+				type : 'POST',
 				success : function(data) {
-					alert(data);
+					var str = "";
+					
+					console.log(data);
+					console.log(checkImageType(data));
+					/* 
+					if(checkImageType(data)) {
+						str = "<div>" + "<img src='displayFile?fileName=" + data + "'/>" + data + "</div>";
+					} else {
+						str = "<div>" + data + "</div>";
+					}
+					 */
+					 
+					if(checkImageType(data)) {
+						str = "<div>"
+							+ "<a href='displayFile?fileName=" + getImageLink(data) + "'>"
+							+ "<img src='displayFile?fileName=" + data + "'>"
+							+ getImageLink(data) + "</a></div>";
+					} else {
+						str = "<div><a href='displayFile?fileName=" + data + "'>" + getOriginalName(data) + "</a></div>";
+					}
+						
+					$(".uploadedList").append(str);
 				}
 			});
 		});
+		
+		function checkImageType(fileName) {		// 정규식을 통해서 파일 확장자가 존재하는지 검사
+			var pattern = /jpg|gif|png|jpeg/i;
+			
+			return fileName.match(pattern);
+		}
+		
+		function getOriginalName(fileName) {
+			if(checkImageType(fileName)) {
+				return;
+			}
+			
+			var idx = fileName.indexOf("_") + 1;
+			return fileName.substr(idx);
+		}
+		
+		function getImageLink(fileName) {
+			if(!checkImageType(fileName)) {
+				return;
+			}
+			
+			var front = fileName.substr(0, 12);
+			var end = fileName.substr(14);
+			
+			return front + end;
+		}
 	</script>
 </body>
 </html>
