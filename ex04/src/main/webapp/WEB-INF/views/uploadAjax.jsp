@@ -64,10 +64,11 @@
 					if(checkImageType(data)) {
 						str = "<div>"
 							+ "<a href='displayFile?fileName=" + getImageLink(data) + "'>"
-							+ "<img src='displayFile?fileName=" + data + "'>"
-							+ getImageLink(data) + "</a></div>";
+							+ "<img src='displayFile?fileName=" + data + "'/>"
+							+ "</a><small data-src=" + data + ">X</small></div>";
 					} else {
-						str = "<div><a href='displayFile?fileName=" + data + "'>" + getOriginalName(data) + "</a></div>";
+						str = "<div><a href='displayFile?fileName=" + data + "'>" + getOriginalName(data) + "</a>"
+							+ "<small data-src=" + data + ">X</small></div>";
 					}
 						
 					$(".uploadedList").append(str);
@@ -100,6 +101,23 @@
 			
 			return front + end;
 		}
+		
+		$(".uploadedList").on("click", "small", function(event) {
+			var that = $(this);
+			
+			$.ajax({
+				url : "deleteFile",
+				type : "post",
+				data : {fileName:$(this).attr("data-src")},
+				dataType : "text",
+				success : function(result) {
+					if(result == 'deleted') {
+						// alert("deleted");
+						that.parent("div").remove();
+					}
+				}
+			});
+		});
 	</script>
 </body>
 </html>
